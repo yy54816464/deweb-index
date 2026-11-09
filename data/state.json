@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-09T13:52:05.166Z",
+  "updatedAt": "2026-11-09T14:01:38.273Z",
   "chains": {
     "bsc": {
-      "cursor": 132595694,
+      "cursor": 132596973,
       "cpu": {
         "next": 0,
         "count": 1490,
@@ -1194,11 +1194,11 @@
       "pending": {
         "0xe4ca32c6888377cc1b3ce32be9d277c37e43339e": {
           "to": "0xe4ca32c6888377cc1b3ce32be9d277c37e43339e",
-          "count": 190
+          "count": 219
         },
         "0x1f02a96fdc4a39e6630b0941408c89a38bd93b6e": {
           "to": "0x1f02a96fdc4a39e6630b0941408c89a38bd93b6e",
-          "count": 5
+          "count": 9
         }
       },
       "sites": {}
