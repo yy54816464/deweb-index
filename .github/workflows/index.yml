@@ -29,7 +29,7 @@ jobs:
           CHAINS: bsc
           SCAN_WINDOW: 100000
           CPU_MAX: 1490
-          FROM_BLOCK: 132000000
+          FROM_BLOCK: 132580000
         run: node indexer.mjs
 
       - name: Commit cursor
