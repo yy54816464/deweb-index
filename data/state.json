@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-09T14:34:26.720Z",
+  "updatedAt": "2026-11-09T15:08:48.603Z",
   "chains": {
     "bsc": {
-      "cursor": 132601333,
+      "cursor": 132605770,
       "cpu": {
         "next": 0,
         "count": 1490,
@@ -1207,7 +1207,7 @@
           "cpuIdx": 1188,
           "area": null,
           "cpuName": "TapeUP",
-          "files": 28,
+          "files": 79,
           "title": "TapeUP · #18",
           "url": "https://18-1188.tapekit.org/"
         },
