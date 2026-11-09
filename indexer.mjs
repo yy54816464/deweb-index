@@ -31,6 +31,14 @@ const CHAINS = {
 };
 const FILE_SET_TOPIC='0x13b9b0f05b22c496a9d9a29e7041c56c04670dc98ab327448870f18eb07b6773';
 const SEL={cpuCount:'0xa94da8a7',cpuAt:'0x4bc7cbbd',name:'0x06fdde03',token:'0xfc0c546a'};
+if (process.env.BSC_RPC_URL) CHAINS.bsc.rpcs.unshift(process.env.BSC_RPC_URL);
+if (process.env.XLAYER_RPC_URL) CHAINS.xlayer.rpcs.unshift(process.env.XLAYER_RPC_URL);
+const EXTRA_CPU = {
+  bsc: {
+    '0x648ac770ce961148ae6e9f4c8d1e62758987e26d': 474,
+    '0xc38c95899cd21522ef5db37cd6be4cb422cef58a': 1188
+  }
+};
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
 const arg=(name,def)=>process.env[name]??def;
 
@@ -93,6 +101,10 @@ async function rpcBatch(net,calls){
   return out;
 }
 async function ensureCpu(net,st){
+  for (const [addr,idx] of Object.entries(EXTRA_CPU[net.key] || {})) {
+    st.cpu.map[addr] = idx;
+    st.cpu.filled[idx] = 1;
+  }
   const count=Number(uint(await rpc(net,'eth_call',[{to:net.factory,data:SEL.cpuCount},'latest'])))||st.cpu.count||0;
   st.cpu.count=count;
   const limit=Math.min(count, Number(arg('CPU_MAX','1490')));

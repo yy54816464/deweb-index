@@ -1,5 +1,30 @@
 {
-  "updatedAt": "2026-11-09T14:01:38.274Z",
-  "count": 0,
-  "sites": []
+  "updatedAt": "2026-11-09T14:21:37.854Z",
+  "count": 2,
+  "sites": [
+    {
+      "name": "18.1188.tape",
+      "sub": "18-1188",
+      "chain": "bsc",
+      "tokenId": 18,
+      "cpuIdx": 1188,
+      "area": null,
+      "cpuName": "TapeUP",
+      "files": 275,
+      "title": "TapeUP · #18",
+      "url": "https://18-1188.tapekit.org/"
+    },
+    {
+      "name": "1.474.tape",
+      "sub": "1-474",
+      "chain": "bsc",
+      "tokenId": 1,
+      "cpuIdx": 474,
+      "area": null,
+      "cpuName": "STARLINK",
+      "files": 11,
+      "title": "STARLINK · #1",
+      "url": "https://1-474.tapekit.org/"
+    }
+  ]
 }

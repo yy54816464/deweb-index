@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-09T14:01:38.273Z",
+  "updatedAt": "2026-11-09T14:21:37.848Z",
   "chains": {
     "bsc": {
-      "cursor": 132596973,
+      "cursor": 132599617,
       "cpu": {
         "next": 0,
         "count": 1490,
@@ -585,7 +585,9 @@
           "0xfa1a1c8ea38a5452c266959c6e3765f8506f67e6": 506,
           "0xa278f3bd392629e4b2419fa23274d1cbe2c5672e": 507,
           "0x036e913b67ffe57f0f90a55b5781680a738710be": 508,
-          "0xda8c68eec463d46b59d459d40e0e37febe5a2840": 509
+          "0xda8c68eec463d46b59d459d40e0e37febe5a2840": 509,
+          "0x648ac770ce961148ae6e9f4c8d1e62758987e26d": 474,
+          "0xc38c95899cd21522ef5db37cd6be4cb422cef58a": 1188
         },
         "filled": {
           "0": 1,
@@ -1187,21 +1189,41 @@
           "596": 1,
           "597": 1,
           "598": 1,
-          "599": 1
+          "599": 1,
+          "1188": 1
         }
       },
-      "names": {},
-      "pending": {
-        "0xe4ca32c6888377cc1b3ce32be9d277c37e43339e": {
-          "to": "0xe4ca32c6888377cc1b3ce32be9d277c37e43339e",
-          "count": 219
+      "names": {
+        "0xc38c95899cd21522ef5db37cd6be4cb422cef58a": "TapeUP",
+        "0x648ac770ce961148ae6e9f4c8d1e62758987e26d": "STARLINK"
+      },
+      "pending": {},
+      "sites": {
+        "18.1188.tape": {
+          "name": "18.1188.tape",
+          "sub": "18-1188",
+          "chain": "bsc",
+          "tokenId": 18,
+          "cpuIdx": 1188,
+          "area": null,
+          "cpuName": "TapeUP",
+          "files": 275,
+          "title": "TapeUP · #18",
+          "url": "https://18-1188.tapekit.org/"
         },
-        "0x1f02a96fdc4a39e6630b0941408c89a38bd93b6e": {
-          "to": "0x1f02a96fdc4a39e6630b0941408c89a38bd93b6e",
-          "count": 9
+        "1.474.tape": {
+          "name": "1.474.tape",
+          "sub": "1-474",
+          "chain": "bsc",
+          "tokenId": 1,
+          "cpuIdx": 474,
+          "area": null,
+          "cpuName": "STARLINK",
+          "files": 11,
+          "title": "STARLINK · #1",
+          "url": "https://1-474.tapekit.org/"
         }
-      },
-      "sites": {}
+      }
     }
   }
 }
