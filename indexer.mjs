@@ -96,7 +96,12 @@ async function ensureCpu(net,st){
   const count=Number(uint(await rpc(net,'eth_call',[{to:net.factory,data:SEL.cpuCount},'latest'])))||st.cpu.count||0;
   st.cpu.count=count;
   const limit=Math.min(count, Number(arg('CPU_MAX','1490')));
-  const missing=[]; for(let i=0;i<limit;i++) if(!st.cpu.filled[i]) missing.push(i);
+  const priority=String(arg('CPU_PRIORITY','')).split(',').map(x=>Number(x)).filter(x=>Number.isInteger(x)&&x>=0&&x<limit);
+  const order=[];
+  const seen={};
+  for(const i of priority){ if(!seen[i]){ seen[i]=1; order.push(i); } }
+  for(let i=0;i<limit;i++){ if(!seen[i] && !st.cpu.filled[i]){ seen[i]=1; order.push(i); } }
+  const missing=order;
   for(let i=0;i<missing.length;i+=40){
     const part=missing.slice(i,i+40);
     const res=await rpcBatch(net,part.map(n=>({to:net.factory,data:SEL.cpuAt+pad(n)})));
