@@ -12,6 +12,6 @@ if ($LASTEXITCODE -ne 0) { throw "indexer failed: $LASTEXITCODE" }
 git add data/state.json public/site-index.json
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) {
-  git commit -m "local index update [skip ci]"
+  git commit -m "local index update"
   git push origin main
 }
