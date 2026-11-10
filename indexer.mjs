@@ -93,15 +93,6 @@ function stateFor(state,net){
 }
 let turn = {};
 async function rpc(net, method, params){
-  if (ES_KEY){
-    if (method === 'eth_blockNumber'){
-      return await esQuery(net, { module:'proxy', action:'eth_blockNumber' });
-    }
-    if (method === 'eth_call'){
-      const c = (params && params[0]) || {};
-      return await esQuery(net, { module:'proxy', action:'eth_call', to:c.to, data:c.data, tag:'latest' });
-    }
-  }
   let last;
   for(let a=0;a<net.rpcs.length;a++){
     const u=net.rpcs[(a+(turn[net.key]||0))%net.rpcs.length];
@@ -117,14 +108,6 @@ async function rpc(net, method, params){
   throw last || new Error('rpc unavailable');
 }
 async function rpcBatch(net,calls){
-  if (ES_KEY){
-    const out=[];
-    for (const c of calls){
-      try { out.push(await rpc(net,'eth_call',[{to:c.to,data:c.data},'latest'])); }
-      catch(e){ out.push(null); }
-    }
-    return out;
-  }
   const out=[]; const size=10;
   for(let i=0;i<calls.length;i+=size){
     const part=calls.slice(i,i+size);
