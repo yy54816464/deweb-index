@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-10T07:44:26.634Z",
+  "updatedAt": "2026-11-10T08:14:17.322Z",
   "chains": {
     "bsc": {
-      "cursor": 132738473,
+      "cursor": 132742462,
       "cpu": {
         "next": 0,
         "count": 1490,
