@@ -48,7 +48,7 @@ if (process.env.GITHUB_ACTIONS && !ES_KEY){
 }
 let esLast = 0;
 async function esThrottle(){
-  const wait = Math.max(0, 230 - (Date.now() - esLast));
+  const wait = Math.max(0, 400 - (Date.now() - esLast));
   if (wait) await sleep(wait);
   esLast = Date.now();
 }
@@ -64,7 +64,8 @@ async function esQuery(net, params){
   if (j && j.error) throw new Error(j.error.message || 'Etherscan error');
   if (j && j.status === '0'){
     if (/no records|no logs|not found/i.test(String(j.message || ''))) return [];
-    throw new Error(j.message || 'Etherscan status 0');
+    const detail = j.result != null ? String(j.result) : '';
+    throw new Error(String(j.message || 'Etherscan status 0') + (detail ? ': ' + detail : ''));
   }
   return j ? j.result : null;
 }
@@ -161,15 +162,20 @@ async function getLogs(net,from,to){
         try {
           rows=await esQuery(net,{module:'logs',action:'getLogs',address:net.registry,topic0:FILE_SET_TOPIC,fromBlock:f,toBlock:t,page:page,offset:1000});
         } catch(e){
-          // Narrow the range if the provider rejects it.
-          if (t>f){
-            const mid=Math.floor((f+t)/2);
-            out.push(...await getLogs(net,f,mid));
-            out.push(...await getLogs(net,mid+1,t));
-            rows=null;
-            break;
+          // Etherscan free keys can reject a range or be rate-limited.
+          // Fall back to the public RPC for this window rather than failing.
+          try{
+            rows=await rpc(net,'eth_getLogs',[{address:net.registry,fromBlock:hex(f),toBlock:hex(t),topics:[FILE_SET_TOPIC]}]);
+          }catch(e2){
+            if (t>f){
+              const mid=Math.floor((f+t)/2);
+              out.push(...await getLogs(net,f,mid));
+              out.push(...await getLogs(net,mid+1,t));
+              rows=null;
+              break;
+            }
+            throw e2;
           }
-          throw e;
         }
         if (!Array.isArray(rows) || !rows.length) break;
         out.push(...rows);
