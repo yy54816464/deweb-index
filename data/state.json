@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-10T02:44:02.626Z",
+  "updatedAt": "2026-11-10T03:14:07.663Z",
   "chains": {
     "bsc": {
-      "cursor": 132698455,
+      "cursor": 132702467,
       "cpu": {
         "next": 0,
         "count": 1490,
@@ -1197,7 +1197,12 @@
         "0xc38c95899cd21522ef5db37cd6be4cb422cef58a": "TapeUP",
         "0x648ac770ce961148ae6e9f4c8d1e62758987e26d": "STARLINK"
       },
-      "pending": {},
+      "pending": {
+        "0x9b357446b4fe1a5baf4f3bed0f1d5d6116a69ca1": {
+          "to": "0x9b357446b4fe1a5baf4f3bed0f1d5d6116a69ca1",
+          "count": 2
+        }
+      },
       "sites": {
         "18.1188.tape": {
           "name": "18.1188.tape",
