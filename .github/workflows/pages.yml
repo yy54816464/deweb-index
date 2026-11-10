@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - public/site-index.json
-      - public/tapeout-link.json
       - public/.nojekyll
   workflow_dispatch:
 
