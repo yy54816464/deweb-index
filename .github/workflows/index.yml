@@ -27,7 +27,7 @@ jobs:
       - name: Build index
         env:
           CHAINS: bsc,xlayer
-          SCAN_WINDOW: 100000
+          SCAN_WINDOW: 1000000
           CPU_MAX: 600
           CPU_PRIORITY: "474,1188"
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
