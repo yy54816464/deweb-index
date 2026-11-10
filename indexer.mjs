@@ -23,7 +23,7 @@ const CHAINS = {
     rpcs:['https://bsc-rpc.publicnode.com','https://bsc-dataseed.bnbchain.org','https://56.rpc.thirdweb.com','https://bsc-mainnet.public.blastapi.io']
   },
   xlayer: {
-    key:'xlayer', chainId:196, area:2, start:60000000,
+    key:'xlayer', chainId:196, area:2, start:70000000,
     registry:'0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6',
     factory:'0x1f09daefa827f02cbb40967cc91b259763760761',
     rpcs:['https://rpc.xlayer.tech','https://xlayerrpc.okx.com','https://xlayer.drpc.org','https://196.rpc.thirdweb.com']

@@ -26,7 +26,7 @@ jobs:
 
       - name: Build index
         env:
-          CHAINS: bsc
+          CHAINS: bsc,xlayer
           SCAN_WINDOW: 100000
           CPU_MAX: 600
           CPU_PRIORITY: "474,1188"
