@@ -250,7 +250,8 @@ async function main(){
   const sites=[];
   for(const key of Object.keys(state.chains||{})) for(const site of Object.values(state.chains[key].sites||{})) sites.push(site);
   sites.sort((a,b)=>b.files-a.files||a.name.localeCompare(b.name));
-  const out={updatedAt:new Date().toISOString(),count:sites.length,sites};
+  const featured=load(path.join(DATA,'featured.json'),[]);
+  const out={updatedAt:new Date().toISOString(),count:sites.length,sites,featured:Array.isArray(featured)?featured:[]};
   save(INDEX_FILE,out);
   console.log('WROTE '+INDEX_FILE+' count='+sites.length);
 }
