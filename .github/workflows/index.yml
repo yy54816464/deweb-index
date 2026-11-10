@@ -1,6 +1,8 @@
 name: DeWEB index
 
 on:
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -24,10 +26,11 @@ jobs:
 
       - name: Build index
         env:
-          CHAINS: bsc
+          CHAINS: bsc,xlayer
           SCAN_WINDOW: 100000
           CPU_MAX: 1490
           CPU_PRIORITY: "474,1188"
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: node indexer.mjs
 
       - name: Commit cursor

@@ -5,7 +5,7 @@
  *   public/site-index.json
  *   data/state.json
  *
- * No private key. Public RPC only; runs on GitHub runner.
+ * No private key. Etherscan V2 when ETHERSCAN_API_KEY is set; public RPC fallback.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -40,6 +40,34 @@ const EXTRA_CPU = {
   }
 };
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const ES_KEY = String(process.env.ETHERSCAN_API_KEY || '').trim();
+const ES_BASE = 'https://api.etherscan.io/v2/api';
+if (process.env.GITHUB_ACTIONS && !ES_KEY){
+  console.error('ETHERSCAN_API_KEY is missing in GitHub Actions secrets.');
+  process.exit(1);
+}
+let esLast = 0;
+async function esThrottle(){
+  const wait = Math.max(0, 230 - (Date.now() - esLast));
+  if (wait) await sleep(wait);
+  esLast = Date.now();
+}
+async function esQuery(net, params){
+  await esThrottle();
+  const u = new URL(ES_BASE);
+  u.searchParams.set('chainid', String(net.chainId));
+  for (const [k,v] of Object.entries(params)) u.searchParams.set(k, String(v));
+  if (ES_KEY) u.searchParams.set('apikey', ES_KEY);
+  const r = await fetch(u.toString());
+  if (!r.ok) throw new Error('Etherscan HTTP ' + r.status);
+  const j = await r.json();
+  if (j && j.error) throw new Error(j.error.message || 'Etherscan error');
+  if (j && j.status === '0'){
+    if (/no records|no logs|not found/i.test(String(j.message || ''))) return [];
+    throw new Error(j.message || 'Etherscan status 0');
+  }
+  return j ? j.result : null;
+}
 const arg=(name,def)=>process.env[name]??def;
 
 function load(file, fallback){ try{return JSON.parse(fs.readFileSync(file,'utf8'));}catch(e){return fallback;} }
@@ -65,6 +93,15 @@ function stateFor(state,net){
 }
 let turn = {};
 async function rpc(net, method, params){
+  if (ES_KEY){
+    if (method === 'eth_blockNumber'){
+      return await esQuery(net, { module:'proxy', action:'eth_blockNumber' });
+    }
+    if (method === 'eth_call'){
+      const c = (params && params[0]) || {};
+      return await esQuery(net, { module:'proxy', action:'eth_call', to:c.to, data:c.data, tag:'latest' });
+    }
+  }
   let last;
   for(let a=0;a<net.rpcs.length;a++){
     const u=net.rpcs[(a+(turn[net.key]||0))%net.rpcs.length];
@@ -80,6 +117,14 @@ async function rpc(net, method, params){
   throw last || new Error('rpc unavailable');
 }
 async function rpcBatch(net,calls){
+  if (ES_KEY){
+    const out=[];
+    for (const c of calls){
+      try { out.push(await rpc(net,'eth_call',[{to:c.to,data:c.data},'latest'])); }
+      catch(e){ out.push(null); }
+    }
+    return out;
+  }
   const out=[]; const size=10;
   for(let i=0;i<calls.length;i+=size){
     const part=calls.slice(i,i+size);
@@ -126,8 +171,33 @@ async function getLogs(net,from,to){
   const out=[]; const span=1000;
   for(let f=from;f<=to;f+=span){
     const t=Math.min(to,f+span-1);
-    try{ out.push(...(await rpc(net,'eth_getLogs',[{address:net.registry,fromBlock:hex(f),toBlock:hex(t),topics:[FILE_SET_TOPIC]}]))); }
-    catch(e){ await sleep(500); }
+    if (ES_KEY){
+      let page=1;
+      while (true){
+        let rows;
+        try {
+          rows=await esQuery(net,{module:'logs',action:'getLogs',address:net.registry,topic0:FILE_SET_TOPIC,fromBlock:f,toBlock:t,page:page,offset:1000});
+        } catch(e){
+          // Narrow the range if the provider rejects it.
+          if (t>f){
+            const mid=Math.floor((f+t)/2);
+            out.push(...await getLogs(net,f,mid));
+            out.push(...await getLogs(net,mid+1,t));
+            rows=null;
+            break;
+          }
+          throw e;
+        }
+        if (!Array.isArray(rows) || !rows.length) break;
+        out.push(...rows);
+        if (rows.length < 1000) break;
+        page++;
+        if (page > 20) break;
+      }
+    } else {
+      try{ out.push(...(await rpc(net,'eth_getLogs',[{address:net.registry,fromBlock:hex(f),toBlock:hex(t),topics:[FILE_SET_TOPIC]}]))); }
+      catch(e){ await sleep(500); }
+    }
   }
   return out;
 }
