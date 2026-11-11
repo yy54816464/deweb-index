@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-10T12:45:41.425Z",
+  "updatedAt": "2026-11-11T13:01:15.702Z",
   "count": 2,
   "sites": [
     {
@@ -26,5 +26,9 @@
       "title": "TapeUP · #18",
       "url": "https://18-1188.tapekit.org/"
     }
+  ],
+  "featured": [
+    "5.20.tape",
+    "18.1188.tape"
   ]
 }
