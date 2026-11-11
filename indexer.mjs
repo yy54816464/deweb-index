@@ -240,6 +240,9 @@ async function main(){
   const window=Number(arg('SCAN_WINDOW','100000'));
   const started=Date.now();
   const budget=Number(arg('RUN_BUDGET_MS','1200000'));
+  const hardTimeout=Number(arg('HARD_TIMEOUT_MS','1500000'));
+  const watchdog=setTimeout(function(){ console.error('HARD TIMEOUT after '+hardTimeout+'ms'); process.exit(124); }, hardTimeout);
+  if (watchdog.unref) watchdog.unref();
   const chains=(arg('CHAINS','bsc')||'bsc').split(',').map(s=>s.trim()).filter(Boolean);
   for(const key of chains){
     const net=CHAINS[key]; if(!net) continue;
