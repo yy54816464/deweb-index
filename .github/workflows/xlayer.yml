@@ -1,0 +1,54 @@
+name: DeWEB XLayer index
+
+on:
+  schedule:
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/xlayer.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deweb-index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build XLayer index
+        env:
+          CHAINS: xlayer
+          SCAN_WINDOW: 10000
+          CPU_MAX: 416
+          RUN_BUDGET_MS: 600000
+          HARD_TIMEOUT_MS: 900000
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: node indexer.mjs
+
+      - name: Commit cursor
+        run: |
+          git config user.name "deweb-indexer"
+          git config user.email "deweb-indexer@users.noreply.github.com"
+          git add data/state.json public/site-index.json
+          git diff --cached --quiet || git commit -m "xlayer index update [skip ci]"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
