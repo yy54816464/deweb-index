@@ -17,6 +17,7 @@ concurrency:
 jobs:
   index:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -27,9 +28,10 @@ jobs:
       - name: Build index
         env:
           CHAINS: bsc,xlayer
-          SCAN_WINDOW: 1000000
+          SCAN_WINDOW: 100000
           CPU_MAX: 600
           CPU_PRIORITY: "474,1188"
+          RUN_BUDGET_MS: 1200000
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: node indexer.mjs
 

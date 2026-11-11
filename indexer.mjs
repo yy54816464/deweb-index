@@ -40,6 +40,15 @@ const EXTRA_CPU = {
   }
 };
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+async function fetchT(url, opts, ms){
+  const ctl = new AbortController();
+  const timer = setTimeout(() => { try { ctl.abort(); } catch(e){} }, ms || 15000);
+  try {
+    return await fetch(url, Object.assign({}, opts || {}, { signal: ctl.signal }));
+  } finally {
+    clearTimeout(timer);
+  }
+}
 const ES_KEY = String(process.env.ETHERSCAN_API_KEY || '').trim();
 const ES_BASE = 'https://api.etherscan.io/v2/api';
 if (process.env.GITHUB_ACTIONS && !ES_KEY){
@@ -58,7 +67,7 @@ async function esQuery(net, params){
   u.searchParams.set('chainid', String(net.chainId));
   for (const [k,v] of Object.entries(params)) u.searchParams.set(k, String(v));
   if (ES_KEY) u.searchParams.set('apikey', ES_KEY);
-  const r = await fetch(u.toString());
+  const r = await fetchT(u.toString(), {}, 15000);
   if (!r.ok) throw new Error('Etherscan HTTP ' + r.status);
   const j = await r.json();
   if (j && j.error) throw new Error(j.error.message || 'Etherscan error');
@@ -98,7 +107,7 @@ async function rpc(net, method, params){
   for(let a=0;a<net.rpcs.length;a++){
     const u=net.rpcs[(a+(turn[net.key]||0))%net.rpcs.length];
     try{
-      const r=await fetch(u,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:Date.now(),method,params:params||[]})});
+      const r=await fetchT(u,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:Date.now(),method,params:params||[]})},15000);
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j=await r.json();
       if(j.error) throw new Error(j.error.message||'rpc error');
@@ -115,7 +124,7 @@ async function rpcBatch(net,calls){
     let done=null;
     for(let a=0;a<net.rpcs.length && !done;a++){
       try{
-        const r=await fetch(net.rpcs[(a+(turn[net.key]||0))%net.rpcs.length],{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(part.map((c,n)=>({jsonrpc:'2.0',id:n+1,method:'eth_call',params:[{to:c.to,data:c.data},'latest']}))) });
+        const r=await fetchT(net.rpcs[(a+(turn[net.key]||0))%net.rpcs.length],{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(part.map((c,n)=>({jsonrpc:'2.0',id:n+1,method:'eth_call',params:[{to:c.to,data:c.data},'latest']}))) },20000);
         if(!r.ok) continue;
         const j=await r.json();
         if(!Array.isArray(j)) continue;
@@ -229,6 +238,8 @@ async function main(){
   const state=load(STATE_FILE,{updatedAt:null,chains:{}});
   const index=load(INDEX_FILE,{updatedAt:null,count:0,sites:[]});
   const window=Number(arg('SCAN_WINDOW','100000'));
+  const started=Date.now();
+  const budget=Number(arg('RUN_BUDGET_MS','1200000'));
   const chains=(arg('CHAINS','bsc')||'bsc').split(',').map(s=>s.trim()).filter(Boolean);
   for(const key of chains){
     const net=CHAINS[key]; if(!net) continue;
