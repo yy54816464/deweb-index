@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-12T01:49:23.330Z",
+  "updatedAt": "2026-11-12T09:22:36.449Z",
   "chains": {
     "bsc": {
-      "cursor": 133073438,
+      "cursor": 133135327,
       "cpu": {
         "next": 0,
         "count": 1492,
@@ -1201,6 +1201,10 @@
         "0x9b357446b4fe1a5baf4f3bed0f1d5d6116a69ca1": {
           "to": "0x9b357446b4fe1a5baf4f3bed0f1d5d6116a69ca1",
           "count": 5
+        },
+        "0x3ff4e147c1edf2ea647bb88b513a20adcaaec0fb": {
+          "to": "0x3ff4e147c1edf2ea647bb88b513a20adcaaec0fb",
+          "count": 9
         }
       },
       "sites": {
