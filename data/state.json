@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-13T03:31:20.970Z",
+  "updatedAt": "2026-11-13T06:49:43.495Z",
   "chains": {
     "bsc": {
       "cursor": 133280298,
@@ -1235,10 +1235,10 @@
       }
     },
     "xlayer": {
-      "cursor": 70139999,
+      "cursor": 70149999,
       "cpu": {
         "next": 0,
-        "count": 416,
+        "count": 418,
         "map": {
           "0x839bdd6fa7a66416a609a735e11de5411b98574e": 0,
           "0x0565ea48ca41ae559d8d491dbb0a9ec945db551b": 1,
