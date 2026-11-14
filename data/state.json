@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-11-14T06:26:58.943Z",
+  "updatedAt": "2026-11-14T06:53:51.293Z",
   "chains": {
     "bsc": {
-      "cursor": 133447401,
+      "cursor": 133499082,
       "cpu": {
         "next": 0,
         "count": 1492,
@@ -1195,7 +1195,8 @@
       },
       "names": {
         "0xc38c95899cd21522ef5db37cd6be4cb422cef58a": "TapeUP",
-        "0x648ac770ce961148ae6e9f4c8d1e62758987e26d": "STARLINK"
+        "0x648ac770ce961148ae6e9f4c8d1e62758987e26d": "STARLINK",
+        "0x50a994e71615474b55559ff4f500928fbc339dd9": "Genesis CPU"
       },
       "pending": {
         "0x9b357446b4fe1a5baf4f3bed0f1d5d6116a69ca1": {
@@ -1208,7 +1209,7 @@
         },
         "0x7c055b39232d2f7de8d04d2ac1de1926843bcddd": {
           "to": "0x7c055b39232d2f7de8d04d2ac1de1926843bcddd",
-          "count": 37
+          "count": 141
         }
       },
       "sites": {
@@ -1235,6 +1236,18 @@
           "files": 11,
           "title": "STARLINK · #1",
           "url": "https://1-474.tapekit.org/"
+        },
+        "4453.0.tape": {
+          "name": "4453.0.tape",
+          "sub": "4453-0",
+          "chain": "bsc",
+          "tokenId": 4453,
+          "cpuIdx": 0,
+          "area": null,
+          "cpuName": "Genesis CPU",
+          "files": 35,
+          "title": "Genesis CPU · #4453",
+          "url": "https://4453-0.tapekit.org/"
         }
       }
     },
